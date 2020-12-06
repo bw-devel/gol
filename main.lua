@@ -8,7 +8,7 @@ function love.load()
 
 	WIDTH    = love.graphics.getWidth()
 	HEIGHT   = love.graphics.getHeight()
-	CELLSIZE = 8
+	CELLSIZE = 32
 	GRID     = grid_init(WIDTH, HEIGHT, CELLSIZE)
 	tickTime = 0.5
 	timer 	 = 0.5
@@ -32,14 +32,15 @@ function love.update(dt)
 	MY = math.floor(love.mouse.getY() / CELLSIZE)
 
 	grid_mouseover()
-
+	grid_update_neighbors()
+	
 	if PAUSED then
 		timer = tickTime
 	else
 		timer = timer - dt
 		if timer <= 0.0 then
 			timer = tickTime
-			grid_update(GRID, dt)
+			grid_update(dt)
 		end
 	end
 
@@ -48,7 +49,7 @@ end
 
 
 function love.draw()
-	grid_draw(GRID)
+	grid_draw()
 	if DEBUG then debug_draw() end
 end
 
@@ -85,7 +86,7 @@ function love.mousereleased(x, y, button, isTouch)
 			GRID.grid[MX][MY].isDying = false
 			GRID.grid[MX][MY].isBirthing = false
 		end
-		MX_clicked = - 1
-		MY_clicked = - 1
+		MX_clicked = -1
+		MY_clicked = -1
 	end
 end

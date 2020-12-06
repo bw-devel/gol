@@ -9,13 +9,15 @@ function grid_init(screenW, screenH, cellSize)
     cellSize=cellSize,
     grid={}
   }
-  --local probability = love.math.random() / 4.0 + 0.25
-  local probability = 0.0
+  local probability = love.math.random() / 4.0 + 0.25
+  --local probability = 0.0
 
   for x = 1, w, 1 do
     out.grid[x] = {}
     for y = 1, h, 1 do
       out.grid[x][y] = {
+        x            = x,
+        y            = y,
         isAlive      = love.math.random() < probability,
         isDying      = false,
         isBirthing   = false,
@@ -28,95 +30,122 @@ function grid_init(screenW, screenH, cellSize)
 end
 
 
-function grid_update(obj, dt)
+function grid_update(dt)
 
   -- process all transitional flags
-  for x = 1, obj.w, 1 do
-    for y = 1, obj.h, 1 do
-      local this = obj.grid[x][y]
-      -- process flags
-      if this.isDying then
-        this.isDying = false
-        this.isAlive = false
-        this.isBirthing = false
-      elseif this.isBirthing then
-        this.isAlive = true
-        this.isDying = false
-        this.isBirthing = false
+  for x = 1, GRID.w, 1 do
+    for y = 1, GRID.h, 1 do
+      local cell = GRID.grid[x][y]
+
+      -- process deaths and births
+      if cell.isDying then
+        cell.isAlive = false
+        cell.isDying = false
+        cell.isBirthing = false
+      elseif cell.isBirthing then
+        cell.isAlive = true
+        cell.isDying = false
+        cell.isBirthing = false
       end
     end
   end
 
-  -- process for life/death
-  for x = 1, obj.w, 1 do
-    for y = 1, obj.h, 1 do
-      local this = obj.grid[x][y]
+  grid_update_neighbors()
 
-      this.numNeighbors = count_neighbors(x, y)
+  -- process for life/death
+  for x = 1, GRID.w, 1 do
+    for y = 1, GRID.h, 1 do
+      local cell = GRID.grid[x][y]
 
       -- process alive cells
-      if this.isAlive then
-        if this.numNeighbors < 2 then
-          this.isDying = true
-        elseif this.numNeighbors > 3 then
-          this.isDying = true
-        end
+      if cell.isAlive then
+        cell.isDying = not (cell.numNeighbors == 2 or cell.numNeighbors == 3)
       else -- process dead cells
-        if this.numNeighbors > 3 then
-          this.isBirthing = true
-        end
+        cell.isBirthing = cell.numNeighbors == 3
       end
     end
   end
 end
 
 
-function grid_draw(obj)
-	for x = 1, obj.w, 1 do
-		for y = 1, obj.h, 1 do
+function grid_draw()
+	for x = 1, GRID.w, 1 do
+		for y = 1, GRID.h, 1 do
+
+      local cell = GRID.grid[x][y]
 
       lgsetcol(0.3, 0.3, 0.3, 1.0)
-      if obj.grid[x][y].isAlive then
-
-        lgrect('fill', (x - 1) * obj.cellSize, (y - 1) * obj.cellSize,
-  			  obj.cellSize, obj.cellSize)
+      if cell.isAlive then
+        lgrect('fill', (x - 1) * GRID.cellSize, (y - 1) * GRID.cellSize,
+  			  GRID.cellSize, GRID.cellSize)
 
         if DEBUG then
           lgsetcol(1.0, 1.0, 1.0, 1.0)
-          love.graphics.print(obj.grid[x][y].numNeighbors, (x - 1) * obj.cellSize, (y - 1) * obj.cellSize)
+          love.graphics.print(cell.numNeighbors,
+            (x - 1) * GRID.cellSize, (y - 1) * GRID.cellSize)
         end
       end
 
-      if obj.grid[x][y].mousedOver then
+      if cell.mousedOver then
         lgsetcol(1.0, 1.0, 1.0, 0.5)
-        lgrect('fill', (x - 1) * obj.cellSize, (y - 1) * obj.cellSize,
-  			  obj.cellSize, obj.cellSize)
+        lgrect('fill', (x - 1) * GRID.cellSize, (y - 1) * GRID.cellSize,
+  			  GRID.cellSize, GRID.cellSize)
       end
 		end
 	end
 end
 
-function count_neighbors(x, y)
+function count_neighbors(cell)
 
   local neighborCount = 0
+  local n = nil
+
   --n
-  if y > 1 then
-    if GRID.grid[x][y - 1].isAlive then neighborCount = neighborCount + 1 end
+  if cell.y > 1 then
+    n = GRID.grid[cell.x][cell.y - 1]
+    if n.isAlive then neighborCount = neighborCount + 1 end
+  end
+
+  --ne
+  if cell.y > 1 and cell.x < GRID.w then
+    n = GRID.grid[cell.x + 1][cell.y - 1]
+    if n.isAlive then neighborCount = neighborCount + 1 end
   end
 
   --e
-  if x < GRID.w then
-    if GRID.grid[x + 1][y].isAlive then neighborCount = neighborCount + 1 end
+  if cell.x < GRID.w then
+    n = GRID.grid[cell.x + 1][cell.y]
+    if n.isAlive then neighborCount = neighborCount + 1 end
+  end
+
+  --se
+  if cell.x < GRID.w and cell.y < GRID.h then
+    n = GRID.grid[cell.x + 1][cell.y +1]
+    if n.isAlive then neighborCount = neighborCount + 1 end
   end
 
   --s
-  if y < GRID.h then
-    if GRID.grid[x][y + 1].isAlive then neighborCount = neighborCount + 1 end
+  if cell.y < GRID.h then
+    n = GRID.grid[cell.x][cell.y  + 1]
+    if n.isAlive then neighborCount = neighborCount + 1 end
+  end
+
+  --sw
+  if cell.x > 1 and cell.y < GRID.h then
+    n = GRID.grid[cell.x - 1][cell.y + 1]
+    if n.isAlive then neighborCount = neighborCount + 1 end
   end
 
   --w
-  if x > 1 then
-    if GRID.grid[x - 1][y].isAlive then neighborCount = neighborCount + 1 end
+  if cell.x > 1 then
+    n = GRID.grid[cell.x - 1][cell.y]
+    if n.isAlive then neighborCount = neighborCount + 1 end
+  end
+
+  --nw
+  if cell.x > 1 and cell.y > 1 then
+    n = GRID.grid[cell.x - 1][cell.y - 1]
+    if n.isAlive then neighborCount = neighborCount + 1 end
   end
 
   return neighborCount
@@ -127,6 +156,14 @@ function grid_mouseover()
   for x = 1, GRID.w, 1 do
     for y = 1, GRID.h, 1 do
       GRID.grid[x][y].mousedOver = (MX == x - 1 and MY == y - 1)
+    end
+  end
+end
+
+function grid_update_neighbors()
+  for x = 1, GRID.w, 1 do
+    for y = 1, GRID.h, 1 do
+      GRID.grid[x][y].numNeighbors = count_neighbors(GRID.grid[x][y])
     end
   end
 end
