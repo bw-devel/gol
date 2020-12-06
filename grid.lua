@@ -13,11 +13,12 @@ function grid_init(screenW, screenH, cellSize)
   for x = 1, w, 1 do
     out.grid[x] = {}
     for y = 1, h, 1 do
-      if love.math.random() < probability then
-        out.grid[x][y] = 0
-      else
-        out.grid[x][y] = 1
-      end
+      out.grid[x][y] = {
+        isAlive      = love.math.random() < probability,
+        isDying      = false,
+        isBirthing   = false,
+        numNeighbors = 0
+      }
     end
   end
   return out
@@ -25,11 +26,18 @@ end
 
 
 function grid_update(obj, dt)
-
 end
 
 
-function grid_draw()
+function grid_draw(obj)
+  lgsetcol(0.3, 0.3, 0.3, 1.0)
+	for x = 1, obj.w, 1 do
+		for y = 1, obj.h, 1 do
+			local type = 'line'
+			if obj.grid[x][y].isAlive then type = 'fill' end
 
-
+			lgrect(type, (x - 1) * obj.cellSize, (y - 1) * obj.cellSize,
+			  obj.cellSize, obj.cellSize)
+		end
+	end
 end

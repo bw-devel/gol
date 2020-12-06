@@ -25,16 +25,7 @@ end
 
 
 function love.draw()
-	lgsetcol(0.3, 0.3, 0.3, 1.0)
-	for x = 1, GRID.w, 1 do
-		for y = 1, GRID.h, 1 do
-			local type = 'line'
-			if GRID.grid[x][y] == 1 then type = 'fill' end
-
-			lgrect(type, (x - 1) * GRID.cellSize, (y - 1) * GRID.cellSize,
-			  GRID.cellSize, GRID.cellSize)
-		end
-	end
+	grid_draw(GRID)
 	if DEBUG then debug_draw() end
 end
 
