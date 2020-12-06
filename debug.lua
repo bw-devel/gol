@@ -26,7 +26,10 @@ function debug_print()
   local txt =  "        FPS: " .. tostring(love.timer.getFPS()) .. "\n"
 
   local w, h = love.window.getDesktopDimensions()
-  txt = txt .. "Desktop Res: " .. tostring(w) .. " x " .. tostring(h)
+  txt = txt .. "Desktop Res: " .. tostring(w) .. " x " .. tostring(h) .."\n"
+  txt = txt .. "timer: " .. tostring(timer) .. "\n"
+  txt = txt .. "Paused: " .. tostring(PAUSED) .. "\n"
+  txt = txt .. "MX/MY: " .. tostring(MX_clicked) .. "/" .. tostring(MY_clicked)
   local x = 10
   local y = 10
   lgsetcol(0.75, 0.75, 0.75 ,1.0)
