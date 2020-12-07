@@ -5,11 +5,11 @@ This is an old stable in gaming. Each cell evalutes its 8-directonal neighbors t
 
 ### Controls ###
 
-| Control     || Effect                    |
-|:-----------:||:-------------------------:|
-| p           || toggles the debug overlay |
-| space       || pause/un-pause simulation |
-| q           || quits game                |
-| mouse-click || add/remove cell           |
+| Control     | Effect                    |
+|:-----------:|:-------------------------:|
+| p           | toggles the debug overlay |
+| space       | pause/un-pause simulation |
+| q           | quits game                |
+| mouse-click | add/remove cell           |
 
 [Conway's Game of Life on Wikipeidia](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life)
