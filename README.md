@@ -3,7 +3,7 @@
 Conway's Game of Life in Love2d
 
 
-![Screenshot](screenshot_001.png)
+![Screenshot](assets/documentation/screenshot_001.png)
 
 ---------------------------------
 

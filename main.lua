@@ -22,8 +22,6 @@ function love.load()
 	love.graphics.setFont(font)
 
 	lgsetbgcol(0.13, 0.15, 0.17, 1.0)
-	--font = love.graphics.newFont('assets/fonts/712_serif.ttf', 32)
-	--love.graphics.setFont(font)
 end
 
 
