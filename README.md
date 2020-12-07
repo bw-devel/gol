@@ -1,7 +1,13 @@
 # gol
 Conway's Game of Life in Love2d
 
-This is an old stable in gaming. Each cell evalutes its 8-directonal neighbors to determine if it lives, dies, or is born into the world.
+
+![Screenshot](screenshot_001.png)
+
+---------------------------------
+
+
+This is an old stable in gaming. Each cell evaluates its 8-directonal neighbors to determine if it lives, dies, or is born into the world.
 
 ### Controls ###
 

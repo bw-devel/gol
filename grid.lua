@@ -9,8 +9,8 @@ function grid_init(screenW, screenH, cellSize)
     cellSize=cellSize,
     grid={}
   }
-  --local probability = love.math.random() / 4.0 + 0.25
-  local probability = 0.0
+  local probability = love.math.random() / 4.0 + 0.25
+  --local probability = 0.0
 
   for x = 1, w, 1 do
     out.grid[x] = {}
