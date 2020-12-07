@@ -9,8 +9,8 @@ function grid_init(screenW, screenH, cellSize)
     cellSize=cellSize,
     grid={}
   }
-  local probability = love.math.random() / 4.0 + 0.25
-  --local probability = 0.0
+  --local probability = love.math.random() / 4.0 + 0.25
+  local probability = 0.0
 
   for x = 1, w, 1 do
     out.grid[x] = {}
@@ -76,8 +76,9 @@ function grid_draw()
 
       lgsetcol(0.3, 0.3, 0.3, 1.0)
       if cell.isAlive then
-        lgrect('fill', (x - 1) * GRID.cellSize, (y - 1) * GRID.cellSize,
-  			  GRID.cellSize, GRID.cellSize)
+        -- extra math to shrink the square 1px around the edges
+        lgrect('fill', (x - 1) * GRID.cellSize + 1, (y - 1) * GRID.cellSize + 1,
+  			  GRID.cellSize - 2, GRID.cellSize - 2)
 
         if DEBUG then
           lgsetcol(1.0, 1.0, 1.0, 1.0)
