@@ -8,7 +8,7 @@ function love.load()
 
 	WIDTH    = love.graphics.getWidth()
 	HEIGHT   = love.graphics.getHeight()
-	CELLSIZE = 32
+	CELLSIZE = 64
 	GRID     = grid_init(WIDTH, HEIGHT, CELLSIZE)
 	tickTime = 0.5
 	timer 	 = 0.5
@@ -18,7 +18,7 @@ function love.load()
 	MX_clicked = -1
 	MY_clicked = -1
 
-	font = love.graphics.newFont('712_serif.ttf', 24)
+	font = love.graphics.newFont('assets/fonts/712_serif.ttf', 24)
 	love.graphics.setFont(font)
 
 	lgsetbgcol(0.13, 0.15, 0.17, 1.0)
