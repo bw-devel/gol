@@ -18,6 +18,9 @@ function love.load()
 	MX_clicked = -1
 	MY_clicked = -1
 
+	font = love.graphics.newFont('712_serif.ttf', 24)
+	love.graphics.setFont(font)
+
 	lgsetbgcol(0.13, 0.15, 0.17, 1.0)
 	--font = love.graphics.newFont('assets/fonts/712_serif.ttf', 32)
 	--love.graphics.setFont(font)
@@ -33,7 +36,7 @@ function love.update(dt)
 
 	grid_mouseover()
 	grid_update_neighbors()
-	
+
 	if PAUSED then
 		timer = tickTime
 	else
@@ -51,6 +54,7 @@ end
 function love.draw()
 	grid_draw()
 	if DEBUG then debug_draw() end
+	overlay_draw()
 end
 
 
@@ -89,4 +93,34 @@ function love.mousereleased(x, y, button, isTouch)
 		MX_clicked = -1
 		MY_clicked = -1
 	end
+end
+
+function overlay_draw()
+	local txts = {
+		"[space] Pause/Un-Pause",
+		"[P] Toggle Debug",
+		"[Q] Quit",
+		"[Mouse] Toggle cells"
+	}
+
+	local txt = ""
+	for i = 1, #txts, 1 do
+		txt = txt .. txts[i]
+		if i < #txts then
+			txt = txt .. "      "
+		end
+	end
+
+	local w = font:getWidth(txt)
+	local h = font:getHeight()
+	local x = math.floor(WIDTH / 2 - (w / 2))
+	local y = HEIGHT - 8 - h
+	lgsetcol(0.0, 0.0, 0.0, 0.25)
+	lgrect('fill', x - 4, y - 4, w + 8, h + 8)
+	lgsetcol(0.0, 0.0, 0.0, 0.75)
+	love.graphics.print(txt, x + 2, HEIGHT - 24 + 2)
+	lgsetcol(1.0, 1.0, 1.0, 0.75)
+	love.graphics.print(txt, x, HEIGHT - 24)
+
+
 end
